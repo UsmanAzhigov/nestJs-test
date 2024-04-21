@@ -1,4 +1,4 @@
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -10,6 +10,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import { LoginDto } from './dto/login-user.dto';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -18,7 +19,8 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
-  @ApiBody({ type: CreateUserDto })
+  @ApiOperation({ summary: 'Login user' })
+  @ApiBody({ type: LoginDto })
   async login(@Request() req) {
     try {
       return this.authService.login(req.user);
@@ -28,6 +30,8 @@ export class AuthController {
   }
 
   @Post('register')
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiBody({ type: CreateUserDto })
   register(@Body() dto: CreateUserDto) {
     try {
       return this.authService.register(dto);
@@ -37,6 +41,7 @@ export class AuthController {
   }
 
   @Post('code-send')
+  @ApiOperation({ summary: 'Send SMS code' })
   sendSms() {
     try {
       return this.authService.sendSms();
@@ -46,6 +51,8 @@ export class AuthController {
   }
 
   @Patch('reset-password')
+  @ApiOperation({ summary: 'Reset user password' })
+  @ApiBody({ type: CreateUserDto })
   resetPassword(@Body() dto: CreateUserDto) {
     try {
       return this.authService.resetPassword(dto.email, dto.password);

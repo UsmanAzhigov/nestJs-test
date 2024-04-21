@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class UsersEntity {
@@ -13,4 +13,10 @@ export class UsersEntity {
 
   @Column()
   fullname: string;
+
+  @Column({ nullable: true })
+  phone: string | null;
+
+  @Column({ nullable: true })
+  userAvatar: string | null;
 }

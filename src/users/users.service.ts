@@ -1,6 +1,6 @@
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersEntity } from './entities/user.entity';
 
@@ -37,5 +37,13 @@ export class UsersService {
 
   update(id: number, dto: CreateUserDto) {
     return this.repository.update(id, dto);
+  }
+
+  updatePhone(id: number, phone: string) {
+    return this.repository.update(id, { phone });
+  }
+
+  updateAvatar(id: number, avatar: string) {
+    return this.repository.update(id, { userAvatar: avatar });
   }
 }
