@@ -69,17 +69,6 @@ export class UsersController {
     }
   }
 
-  @Put(':id/phone')
-  @ApiOperation({ summary: 'Update a user phone by ID' })
-  @ApiParam({ name: 'id', description: 'User ID' })
-  async updatePhone(@Param('id') id: number, @Body() phone: string) {
-    try {
-      return await this.usersService.updatePhone(id, phone);
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-
   @Put(':id/avatar')
   @ApiOperation({ summary: 'Update a user avatar by ID' })
   @ApiParam({ name: 'id', description: 'User ID' })

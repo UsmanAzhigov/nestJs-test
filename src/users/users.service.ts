@@ -39,10 +39,6 @@ export class UsersService {
     return this.repository.update(id, dto);
   }
 
-  updatePhone(id: number, phone: string) {
-    return this.repository.update(id, { phone });
-  }
-
   updateAvatar(id: number, avatar: string) {
     return this.repository.update(id, { userAvatar: avatar });
   }

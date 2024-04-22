@@ -11,4 +11,7 @@ export class FileEntity {
 
   @Column()
   path: string;
+
+  @Column()
+  user_id: number;
 }

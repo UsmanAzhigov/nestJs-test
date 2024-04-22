@@ -11,4 +11,9 @@ export class CreateFileDto {
     example: 'path',
   })
   path: string;
+
+  @ApiProperty({
+    example: 1,
+  })
+  user_id: number;
 }

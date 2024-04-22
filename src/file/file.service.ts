@@ -2,7 +2,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateFileDto } from './dto/create-file.dto';
 import { FileEntity } from './entities/file.entity';
 
 @Injectable()
@@ -12,9 +11,14 @@ export class FileService {
     private repository: Repository<FileEntity>,
   ) {}
 
-  async create(dto: CreateFileDto): Promise<FileEntity> {
-    const file = this.repository.create(dto);
-    return await this.repository.save(file);
+  create(file: Express.Multer.File, userId: number) {
+    return this.repository.save({
+      name: file.originalname,
+      path: file.path,
+      user: {
+        id: userId,
+      },
+    });
   }
 
   async findAll(): Promise<FileEntity[]> {

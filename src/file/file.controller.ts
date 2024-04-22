@@ -1,8 +1,25 @@
-import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
 import { FileService } from './file.service';
-import { CreateFileDto } from './dto/create-file.dto';
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Delete,
+  UploadedFile,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileEntity } from './entities/file.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { fileStorage } from './storage';
 
 @Controller('file')
 @ApiTags('file')
@@ -10,9 +27,33 @@ export class FileController {
   constructor(private readonly fileService: FileService) {}
 
   @Post()
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: fileStorage,
+    }),
+  )
   @ApiOperation({ summary: 'Create a new file' })
-  async create(@Body() createFileDto: CreateFileDto): Promise<FileEntity> {
-    return await this.fileService.create(createFileDto);
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async create(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new MaxFileSizeValidator({ maxSize: 10485760 })],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return file;
   }
 
   @Get()
