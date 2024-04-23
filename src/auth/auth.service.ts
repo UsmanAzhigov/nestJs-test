@@ -1,8 +1,8 @@
+import { JwtService } from '@nestjs/jwt';
+import { LoginDto } from './dto/login-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { LoginDto } from './dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -36,7 +36,10 @@ export class AuthService {
 
   async login(user: LoginDto) {
     return {
-      token: this.jwtService.sign({ id: user.id }, { secret: 'test123' }),
+      token: this.jwtService.sign(
+        { id: user.id },
+        { secret: process.env.SECRET_KEY },
+      ),
     };
   }
 

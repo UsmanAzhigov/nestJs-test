@@ -1,7 +1,6 @@
-import { ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
 import {
   Body,
   Controller,
