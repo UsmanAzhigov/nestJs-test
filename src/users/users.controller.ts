@@ -6,10 +6,18 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { UserId } from 'src/decorators/user-id.decorator';
 
 @Controller('users')
 @ApiTags('users')
@@ -78,5 +86,11 @@ export class UsersController {
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  @Get('/me')
+  @UseGuards(JwtAuthGuard)
+  getMe(@UserId() id: number) {
+    return this.usersService.findById(id);
   }
 }

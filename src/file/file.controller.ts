@@ -16,10 +16,12 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
-import { FileEntity } from './entities/file.entity';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { fileStorage } from './storage';
+import { FileEntity } from './entities/file.entity';
+import { UserId } from 'src/decorators/user-id.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('file')
 @ApiTags('file')
@@ -53,7 +55,7 @@ export class FileController {
     )
     file: Express.Multer.File,
   ) {
-    return file;
+    return await this.fileService.create(file);
   }
 
   @Get()

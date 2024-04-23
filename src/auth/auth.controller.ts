@@ -11,13 +11,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { LoginDto } from './dto/login-user.dto';
+import { LocalAuthGuard } from './guards/local.guard';
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiOperation({ summary: 'Login user' })
   @ApiBody({ type: LoginDto })

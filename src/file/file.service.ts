@@ -11,13 +11,10 @@ export class FileService {
     private repository: Repository<FileEntity>,
   ) {}
 
-  create(file: Express.Multer.File, userId: number) {
+  create(file: Express.Multer.File) {
     return this.repository.save({
       name: file.originalname,
       path: file.path,
-      user: {
-        id: userId,
-      },
     });
   }
 

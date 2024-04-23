@@ -14,10 +14,15 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Test swagger')
     .setDescription('Trying to learn how to create a swagger')
+    .addBearerAuth()
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger', app, document);
+  SwaggerModule.setup('swagger', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
   // PORT
   await app.listen(5555);
