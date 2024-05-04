@@ -1,15 +1,10 @@
 import { diskStorage } from 'multer';
+import { v4 as uuidv4 } from 'uuid';
 
-const generateId = () =>
-  Array(16)
-    .fill(null)
-    .map(() => Math.round(Math.random() * 16).toString(16))
-    .join('');
-
-const normalizeFilename = (reg, file, callback) => {
+const normalizeFilename = (req, file, callback) => {
   const fileExtName = file.originalname.split('.').pop();
-
-  callback(null, `${generateId()}.${fileExtName}`);
+  const uniqueFilename = `${uuidv4()}.${fileExtName}`;
+  callback(null, uniqueFilename);
 };
 
 export const fileStorage = diskStorage({
