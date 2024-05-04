@@ -6,10 +6,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private usersService: UsersService) {}
   sms = '1111';
 
   async validateUser(email: string, pass: string): Promise<any> {
@@ -24,23 +21,15 @@ export class AuthService {
   async register(dto: CreateUserDto) {
     try {
       const userData = await this.usersService.create(dto);
-      return {
-        token: this.jwtService.sign({ id: userData.id }),
-      };
+      return userData;
     } catch (error) {
       console.log(error);
-
       throw new ForbiddenException(error);
     }
   }
 
   async login(user: LoginDto) {
-    return {
-      token: this.jwtService.sign(
-        { id: user.id },
-        { secret: process.env.SECRET_KEY },
-      ),
-    };
+    return user;
   }
 
   async sendSms() {

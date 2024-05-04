@@ -13,4 +13,14 @@ export class CreateUserDto {
     example: 'password',
   })
   password: string;
+
+  @ApiProperty({
+    example: '89123456789',
+  })
+  phone?: string;
+
+  @ApiProperty({
+    example: 'test.png',
+  })
+  userAvatar?: string;
 }

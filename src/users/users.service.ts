@@ -39,7 +39,7 @@ export class UsersService {
     return this.repository.update(id, dto);
   }
 
-  updateAvatar(id: number, avatar: string) {
+  updateAvatar(id: number, avatar: Express.Multer.File | any) {
     return this.repository.update(id, { userAvatar: avatar });
   }
 }

@@ -16,11 +16,9 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   UseInterceptors,
-  UseGuards,
 } from '@nestjs/common';
 import { fileStorage } from './storage';
 import { FileEntity } from './entities/file.entity';
-import { UserId } from 'src/decorators/user-id.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('file')

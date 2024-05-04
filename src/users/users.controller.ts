@@ -6,18 +6,22 @@ import {
   Param,
   Delete,
   Put,
-  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipe,
+  MaxFileSizeValidator,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiParam,
-  ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
 } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { UserId } from 'src/decorators/user-id.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('users')
 @ApiTags('users')
@@ -76,11 +80,32 @@ export class UsersController {
       throw new Error(error);
     }
   }
-
   @Put(':id/avatar')
   @ApiOperation({ summary: 'Update a user avatar by ID' })
   @ApiParam({ name: 'id', description: 'User ID' })
-  async updateAvatar(@Param('id') id: number, @Body() avatar: string) {
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('avatar'))
+  @ApiBody({
+    description: 'Avatar image',
+    schema: {
+      type: 'object',
+      properties: {
+        avatar: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async updateAvatar(
+    @Param('id') id: number,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new MaxFileSizeValidator({ maxSize: 10485760 })],
+      }),
+    )
+    avatar: Express.Multer.File | any,
+  ) {
     try {
       return await this.usersService.updateAvatar(id, avatar);
     } catch (error) {
@@ -89,7 +114,6 @@ export class UsersController {
   }
 
   @Get('/me')
-  @UseGuards(JwtAuthGuard)
   getMe(@UserId() id: number) {
     return this.usersService.findById(id);
   }
